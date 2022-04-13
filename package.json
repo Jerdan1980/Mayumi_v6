@@ -1,0 +1,19 @@
+{
+  "name": "mayumi_v6",
+  "version": "1.0.0",
+  "description": "Multipurpose discord bot for gaming and CODS",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "mayumi_v6"
+  },
+  "keywords": [
+    "discord-bot",
+    "discord-js"
+  ],
+  "author": "Jerdan1980",
+  "license": "ISC"
+}
