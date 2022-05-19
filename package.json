@@ -4,6 +4,8 @@
   "description": "Multipurpose discord bot for gaming and CODS",
   "main": "index.js",
   "scripts": {
+    "start": "nohup node index.js > log.txt 2>&1 & echo $! > pid.txt",
+    "stop": "kill $(tail pid.txt)",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start-dev": "nodemon index.js",
     "deploy-dev": "node deploy-commands.js dev",
