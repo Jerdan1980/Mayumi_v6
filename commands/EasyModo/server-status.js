@@ -14,21 +14,22 @@ module.exports = {
 			port: '7777'
 		}).then(async function (state) {
 			await interaction.followUp(`Ark Server: **${state.name}** is online (${state.players.length}/${state.maxplayers} players)`);
-			console.log(state);
+			//console.log(state);
 		}).catch(async function (error) {
 			await interaction.followUp("Ark Server is offline");
-			console.log(error);
+			//console.log(error);
 		});
 
 		Gamedig.query({
 			type: 'minecraft',
-			host: '73.35.12.208:25565'
+			host: '73.35.12.208',
+			port: '25565'
 		}).then(async function (state) {
 			await interaction.followUp(`MC Server: **${state.name}** is online (${state.players.length}/${state.maxplayers} players)`);
-			console.log(state)
+			//console.log(state)
 		}).catch(async function (error) {
 			await interaction.followUp("MC Server is offline");
-			console.log(error);
+			//console.log(error);
 		});
 	},
 };
