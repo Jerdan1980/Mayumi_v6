@@ -34,14 +34,15 @@ for (const file of CODSCommandFiles) {
 
 const rest = new REST({ version: '9' }).setToken(process.env.discordToken);
 
-rest.put(Routes.applicationGuildCommands(process.env.clientID, process.env.CODSID), { body: CODSCommands })
-	.then(() => console.log('Successfully registered application commands to CODS.'))
-	.catch((error) => {
-		console.error
-	});
+if (process.argv[2] !== "dev")
+	rest.put(Routes.applicationGuildCommands(process.env.clientID, process.env.CODSID), { body: CODSCommands })
+		.then(() => console.log('Successfully registered application commands to CODS.'))
+		.catch((error) => {
+			console.error(error)
+		});
 
 rest.put(Routes.applicationGuildCommands(process.env.clientID, process.env.EasyModoID), { body: EasyModoCommands })
 	.then(() => console.log('Successfully registered application commands to EasyModo.'))
 	.catch((error) => {
-		console.error
+		console.error(error)
 	});
