@@ -6,6 +6,9 @@ module.exports = {
 		.setDescription('Returns your participant ID!'),
 	async execute(interaction) {
 		const userID = interaction.member.user.id;
-		await interaction.reply(`Your participant id is: \`${userID.substring(userID.length - 6)}\``);
+		await interaction.reply({
+			content: `Your participant id is: \`${userID.substring(userID.length - 6)}\``,
+			ephemeral: true
+		});
 	},
 };
