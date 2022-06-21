@@ -29,10 +29,13 @@ module.exports = {
 			if (row != -1) {
 				// send the user data
 				const data = res.data.values[row];
-				await interaction.reply(`Your tier is: **${data[1]}**\nYour decay status is: \`${data[2] ?? 'N/A'}\``);
+				await interaction.reply({
+					content: `Your tier is: **${data[1]}**\nYour decay status is: \`${data[2] == '' ? 'N/A' : data[2]}\``,
+					ephemeral: true
+				});
 
 				// check if their username has chaned and update that
-				const name = `${interaction.member.user.username}#${interaction.member.user.discriminator}`
+				const name = interaction.user.tag;
 				if (data[0] !== name) {
 					// update their name in the tier list
 					sheets.spreadsheets.values.update({
@@ -58,7 +61,10 @@ module.exports = {
 					})
 				}
 			} else {
-				await interaction.reply("Could not find your tier. Consider signing up?")
+				await interaction.reply({
+					content: "Could not find your tier. This database might not be up-to-date.",
+					ephemeral: true
+				})
 			}
 		});
 	},
