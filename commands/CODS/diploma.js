@@ -2,6 +2,10 @@ const { SlashCommandBuilder } = require('@discordjs/builders');
 const { IntegrationApplication } = require('discord.js');
 const Diploma = require('../../models/diplomaModel.js');
 
+const { google } = require('googleapis');
+const SCOPES = ['https://www.googleapis.com/auth/spreadsheets'];
+const TOKEN_PATH = '../../gapi-token.json';
+
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('diploma')
@@ -68,7 +72,10 @@ module.exports = {
 						.setDescription('Enter Discord ID!'))
 				.addStringOption(option =>
 					option.setName('category')
-						.setDescription('Category diploma'))),
+						.setDescription('Category diploma')))
+		.addSubcommand(subcommand =>
+			subcommand.setName('bulk-award')
+				.setDescription('Bulk award diplomas')),
 	async execute(interaction) {
 		const cmd = interaction.options.getSubcommand();
 
@@ -156,6 +163,41 @@ module.exports = {
 					}
 					await interaction.reply(`Updated: \`${diploma._id}: ${diploma.name} "${diploma.category}" (${diploma.competition})\``);
 				});
+				break;
+			case 'bulk-award':
+				const auth = new google.auth.GoogleAuth({
+					keyFile: 'gapi-token.json',
+					scopes: SCOPES,
+				});
+				google.options({auth: auth});
+				const sheets = google.sheets({version: 'v4'});
+				sheets.spreadsheets.values.get({
+					spreadsheetId: '1IvUGlmQ6ApxmWFGOIm7EqZltBsFkBxCWYfom2DnDcSw',
+					range: 'Sheet1!A2:D'
+				}, async function (err, res) {
+					if (err) {
+						await interaction.reply("Something went wrong!");
+						return console.log('The API returned an error: ' + err);
+					}
+					let arr = res.data.values.map((row) => {
+						let payload = {
+							name: row[0],
+							competition: row[1],
+							category: row[3],
+						}
+						if (row[2] != '') 
+							payload.userID = row[2];
+						return payload;
+					});
+					Diploma.insertMany(arr, async function (err, docs) {
+						if (err) {
+							await interaction.reply("Something went wrong!");
+							return console.log('The API returned an error: ' + err)
+						}
+						console.log(docs);
+						await interaction.reply(`${docs.length} diplomas added`);
+					})
+				})
 				break;
 		}
 	},
