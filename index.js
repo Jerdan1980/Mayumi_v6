@@ -1,7 +1,7 @@
 require('dotenv').config();
 // Require the necessary discord.js classes
 const fs = require('node:fs');
-const { Client, Collection, Intents } = require('discord.js');
+const { Client, Collection, GatewayIntentBits, InteractionType } = require('discord.js');
 const mongoose = require('mongoose');
 const { mainModule } = require('node:process');
 const walk = require('@root/walk');
@@ -14,14 +14,14 @@ async function main() {
 }
 
 // Create a new client instance
-const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
+const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
 // Allows access to commands in other files
 client.commands = new Collection();
 
 // Imports files
-walk.walk('./commands', walkFunc);
-async function walkFunc(err, pathname, dirent) {
+walk.walk('./commands', walkCommandsFunc);
+async function walkCommandsFunc(err, pathname, dirent) {
 	//console.log(pathname, dirent);
 	if (dirent.name.endsWith('.js')) {
 		const command = require(`./${pathname}`);
@@ -31,23 +31,20 @@ async function walkFunc(err, pathname, dirent) {
 	}
 }
 
-/*
-const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
-for (const file of commandFiles) {
-	const command = require(`./commands/${file}`);
-	// Set a new item in the Collection
-	// With the key as the command name and the value as the exported module
-	client.commands.set(command.data.name, command);
+walk.walk('./events', walkEventsFunc);
+async function walkEventsFunc(err, pathname, dirent) {
+	if (dirent.name.endsWith('.js')) {
+		const event = require(`./${pathname}`);
+		if (event.once) {
+			client.once(event.name, (...args) => event.execute(...args));
+		} else {
+			client.on(event.name, (...args) => event.execute(...args));
+		}
+	}
 }
-*/
-
-// When the client is ready, run this code (only once)
-client.once('ready', () => {
-	console.log('Ready!');
-});
 
 client.on('interactionCreate', async interaction => {
-	if (!interaction.isCommand()) return;
+	if (interaction.type !== InteractionType.ApplicationCommand) return;
 
 	const command = client.commands.get(interaction.commandName);
 
