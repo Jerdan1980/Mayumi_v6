@@ -1,5 +1,4 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const { IntegrationApplication } = require('discord.js');
+const { SlashCommandBuilder, IntegrationApplication } = require('discord.js');
 const Diploma = require('../../models/diplomaModel.js');
 
 const { google } = require('googleapis');

@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
+const { SlashCommandBuilder } = require('discord.js');
 const { dolls } = require('girlsfrontline-core');
 const gfcore = require('girlsfrontline-core/build/i18n/en-US/gfcore.json');
 

@@ -1,8 +1,7 @@
 require('dotenv').config();
 const fs = require('node:fs');
-const { SlashCommandBuilder } = require('@discordjs/builders');
+const { SlashCommandBuilder, Routes  } = require('discord.js');
 const { REST } = require('@discordjs/rest');
-const { Routes } = require('discord-api-types/v9');
 
 const CODSCommands = [];
 const EasyModoCommands = [];
@@ -32,7 +31,7 @@ for (const file of CODSCommandFiles) {
 //console.log();
 //console.log('EasyModo: ', EasyModoCommands);
 
-const rest = new REST({ version: '9' }).setToken(process.env.discordToken);
+const rest = new REST({ version: '10' }).setToken(process.env.discordToken);
 
 if (process.argv[2] !== "dev")
 	rest.put(Routes.applicationGuildCommands(process.env.clientID, process.env.CODSID), { body: CODSCommands })
