@@ -25,6 +25,7 @@
     "@discordjs/rest": "^0.3.0",
     "@root/walk": "^1.1.0",
     "discord-api-types": "^0.31.1",
+    "discord-starboards": "^2.3.2",
     "discord.js": "^14",
     "dotenv": "^16.0.0",
     "gamedig": "^4.0.4",
@@ -33,5 +34,10 @@
     "i18next": "^21.6.16",
     "mongoose": "^6.3.0",
     "nodemon": "^2.0.15"
-  }
+  },
+	"nodemonConfig": {
+		"ignore": [
+			"starboards.json"
+		]
+	}
 }
