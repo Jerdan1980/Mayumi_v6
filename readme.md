@@ -2,7 +2,7 @@
 
 A multipurpose bot designed for the CODS and Easy Modo servers.
 
-[Invite Mayumi](https://discord.com/api/oauth2/authorize?client_id=316084155182219265&permissions=2415938560&scope=bot%20applications.commands)
+[Invite Mayumi](https://discord.com/api/oauth2/authorize?client_id=316084155182219265&permissions=2416036928&scope=bot%20applications.commands)
 
 ## Development
 

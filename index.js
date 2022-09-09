@@ -5,6 +5,7 @@ const { Client, Collection, GatewayIntentBits, InteractionType } = require('disc
 const mongoose = require('mongoose');
 const { mainModule } = require('node:process');
 const walk = require('@root/walk');
+const StarboardsManager = require('discord-starboards');
 
 main();
 async function main() {
@@ -14,7 +15,11 @@ async function main() {
 }
 
 // Create a new client instance
-const client = new Client({ intents: [GatewayIntentBits.Guilds] });
+const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessageReactions] });
+
+// Initialize discord-starboards
+const manager = new StarboardsManager(client);
+client.starboardsManager = manager;
 
 // Allows access to commands in other files
 client.commands = new Collection();
@@ -35,7 +40,9 @@ walk.walk('./events', walkEventsFunc);
 async function walkEventsFunc(err, pathname, dirent) {
 	if (dirent.name.endsWith('.js')) {
 		const event = require(`./${pathname}`);
-		if (event.once) {
+		if (event.starboard) {
+			manager.on(event.name, (...args) => event.execute(...args));
+		} else if (event.once) {
 			client.once(event.name, (...args) => event.execute(...args));
 		} else {
 			client.on(event.name, (...args) => event.execute(...args));
